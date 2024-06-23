@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { addStudent } from '../../reducers/StudentReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,7 +13,7 @@ function CreateStudent() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        dispatch(addStudent({id: students[students.length - 1].id + 1, name: name, email: email}));
+        //dispatch(addStudent({id: students[students.length - 1].id + 1, name: name, email: email}));
         navigate('/');
     }
   return (

@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CreateStudent from './components/students/CreateStudent'
 import EditStudent from './components/students/EditStudent'
+import StudentList from './components/students/StudentList'
 
 function App() {
 
