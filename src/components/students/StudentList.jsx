@@ -3,20 +3,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchNationalities } from '../../reducers/nationality/fetchNationalityListReducerSlice';
 import { fetchStudents } from '../../reducers/students/fetchStudentListReducerSlice';
 import { formatDate } from '../../utils/Utilities';
-import StudentPopup from './StudentPopup';
 import { toast } from 'react-toastify';
+import StudentModalPopup from './StudentModalPopup';
 
 const StudentList = ({canEdit}) => {
     const dispatch = useDispatch();
     const students = useSelector((state) => state.students.data);
     const isLoading = useSelector((state) => state.students.isLoading);
     const isError = useSelector((state) => state.students.isError);
-  
     const nationalities = useSelector((state) => state.nationalities.data);
     
-  
     const [showModal, setShowModal] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(
+      {id: 0, firstName: '', lastName: '', dateOfBirth: '', nationalityId: 0}
+    );
   
     useEffect(() => {
       if(isLoading == true) {
@@ -26,18 +26,26 @@ const StudentList = ({canEdit}) => {
     }, [isLoading, dispatch]);
     
     const handleEdit = (item) => {
-      setSelectedItem(item);
-      console.log(item)
-      setShowModal(true);
+      if(item!=null){
+        setSelectedItem(item);
+        setShowModal(true);
+      }
+    }
+
+    const handleCloseModal = () => {
+      setShowModal(false);
     }
   
     const handleCreate = () => {
-      setSelectedItem({});
+      setSelectedItem({id: 0, firstName: '', lastName: '', dateOfBirth: '', nationalityId: 0});
       setShowModal(true);
     }
   
     const handleModalPopup = (modalPopupStatus) => {
       setShowModal(modalPopupStatus);
+      if(!modalPopupStatus){
+        window.location.reload();
+      }
     }
   
     const onSave = (student) => {
@@ -53,7 +61,9 @@ const StudentList = ({canEdit}) => {
       <h2>Student List</h2>
     {/* <Link to="/student/create" className='btn btn-success my-3'>Create</Link> */}
     <button onClick={() => handleCreate()} className='btn btn-sm btn-primary ms-2' >Create Student</button>
-    <StudentPopup show={showModal} student1={selectedItem} nationalityList={nationalities} handleMoalPopup={handleModalPopup} onSave={onSave} canEdit={canEdit} />
+    
+    {/* <StudentPopup show={showModal} student1={selectedItem} nationalityList={nationalities} handleMoalPopup={handleModalPopup} onSave={onSave} canEdit={canEdit} /> */}
+    <StudentModalPopup show={showModal} onClose={handleCloseModal} student={selectedItem} nationalities={nationalities} handleMoalPopup={handleModalPopup} canEdit={canEdit} />
     <table className='table'>
       <thead>
           <tr>
@@ -73,9 +83,7 @@ const StudentList = ({canEdit}) => {
                   <td>{student.lastName}</td>
                   <td>{formatDate(student.dateOfBirth)}</td>
                   <td>
-                      {/* <Link to={`/student/edit/${student.id}`} className='btn btn-sm btn-primary'>Edit</Link> */}
                       <button onClick={() => handleEdit(student)} className='btn btn-sm btn-primary ms-2'>Edit Student</button>
-                      <button onClick={() => handleDelete(student.id)} className='btn btn-sm btn-danger ms-2'>Delete</button>
                   </td>
               </tr>
           ))}

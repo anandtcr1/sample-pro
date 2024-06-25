@@ -3,14 +3,12 @@ import axios from "axios";
 
 export const createStudent = createAsyncThunk('createStudent', async (student) => {
     const response = await axios.post('https://localhost:7060/api/Students', student);
-    console.log('resCreate', response);
     return response.data;
 });
 
 export const updateStudent = createAsyncThunk('updateStudent', async (student) => {
     const response = await axios.put(`https://localhost:7060/api/Students/${student.id}`, student)
     return response.data;
-    // dispatch({ type: 'CREATE_STUDENT_SUCCESS', payload: response.data });
 });
 
 const saveStudentSlice = createSlice({

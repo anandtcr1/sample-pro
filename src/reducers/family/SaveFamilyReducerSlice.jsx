@@ -2,14 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const createFamily = createAsyncThunk('createFamily', async ({studentId, family}) => {
-    console.log('fam red -> ', family);
     const response = await axios.post(`https://localhost:7060/api/Students/${studentId}/FamilyMembers`, family)
     return response.data;
 });
 
 export const updateFamily = createAsyncThunk('updateFamily', async ({id, family}) => {
-    console.log(id)
     const response = await axios.put(`https://localhost:7060/api/FamilyMembers/${id}`, family)
+    return response.data;
+});
+
+export const deleteFamily = createAsyncThunk('deleteFamily', async(id) => {
+    const response = await axios.delete(`https://localhost:7060/api/FamilyMembers/${id}`)
     return response.data;
 });
 
